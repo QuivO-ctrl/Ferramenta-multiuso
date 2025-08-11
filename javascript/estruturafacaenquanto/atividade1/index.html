@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ferramenta Única</title>
+  <link rel="stylesheet" href="css/config.css" />
+</head>
+<body>
+  <div class="card">
+    <h1>Ferramenta Multiuso</h1>
+    <p><small>Escolha uma função abaixo. Resultado aparecerá no painel inferior.</small></p>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="primary" onclick="validaProc()">Somar Números</button>
+      <button onclick="calcularMediasEscola()">Médias Escola</button>
+    </div>
+
+    <hr style="margin:18px 0;border:none;border-top:1px solid #7e7e7e;">
+
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <input id="numeroTabuada" placeholder="Número para tabuada" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+      <button class="primary" onclick="tabuada()">Tabuada</button>
+    </div>
+
+    <div style="margin-top:10px;">
+      <button onclick="limpar()">Limpar Resultado</button>
+    </div>
+
+    <div id="resultado" class="output">Resultado aparecerá aqui.</div>
+  </div>
+
+  <script>
+    function validaProc() {
+      let somatoria = 0;
+      let contado = 0;
+      let ultimoNumero = null;
+
+      do {
+        const input = prompt("Digite o número (digite 0 para terminar ou Cancelar para sair):");
+        if (input === null) break;
+        const numero = parseInt(input.trim(), 10);
+        if (Number.isNaN(numero)) {
+          alert("Entrada inválida. Digite um número inteiro válido.");
+          ultimoNumero = null;
+          continue;
+        }
+        somatoria += numero;
+        contado++;
+        ultimoNumero = numero;
+      } while (ultimoNumero !== 0);
+
+      const mensagem = contado === 0
+        ? "Nenhum número válido informado."
+        : `Foram informados ${contado} número(s). Somatória: ${somatoria}.`;
+
+      document.getElementById("resultado").textContent = mensagem;
+    }
+
+    function calcularMediasEscola() {
+      const turmas = 5;
+      let totalAlunosMedia7 = [];
+      let somaMediasTurmas = 0;
+      let totalAlunosEscola = 0;
+
+      for (let t = 1; t <= turmas; t++) {
+        let n = parseInt(prompt(`Quantos alunos na turma ${t}?`));
+        let alunosMedia7 = 0;
+        let somaMediasTurma = 0;
+
+        for (let a = 1; a <= n; a++) {
+          let media = parseFloat(prompt(`Média do aluno ${a} da turma ${t}:`));
+          somaMediasTurma += media;
+          if (media >= 7) alunosMedia7++;
+        }
+
+        totalAlunosMedia7.push(alunosMedia7);
+        somaMediasTurmas += somaMediasTurma;
+        totalAlunosEscola += n;
+      }
+
+      let mediaGeral = somaMediasTurmas / totalAlunosEscola;
+      document.getElementById("resultado").textContent =
+        `Média geral da escola: ${mediaGeral.toFixed(2)}\nAlunos com média >= 7 por turma: ${totalAlunosMedia7.join(', ')}.`;
+    }
+
+    function tabuada() {
+      const numero = parseInt(document.getElementById("numeroTabuada").value, 10);
+      if (Number.isNaN(numero)) {
+        document.getElementById("resultado").textContent = "Digite um número válido para gerar a tabuada.";
+        return;
+      }
+      let resultado = "";
+      for (let i = 1; i <= 10; i++) {
+        resultado += `${numero} x ${i} = ${numero * i}\n`;
+      }
+      document.getElementById("resultado").textContent = resultado;
+    }
+
+    function limpar() {
+      document.getElementById("resultado").textContent = "Resultado aparecerá aqui.";
+      document.getElementById("numeroTabuada").value = "";
+    }
+  </script>
+</body>
+</html>
+
